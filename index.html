@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Zenith 365 premium savings tracker login">
+  <title>Zenith 365 | Admin Access</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="auth">
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-glow bg-glow-primary"></div>
+    <div class="bg-glow bg-glow-secondary"></div>
+  </div>
+
+  <main class="auth-layout">
+    <section class="auth-shell glass-card">
+      <div class="auth-left">
+        <p class="pill">Secure Access</p>
+        <h1>Track every cedi with confidence.</h1>
+        <p class="muted">
+          Sign in to manage your 365-day savings plans, monitor streaks,
+          and protect progress for every account on this device.
+        </p>
+        <div class="auth-hero" aria-hidden="true">
+          <span>Build wealth consistently.</span>
+        </div>
+      </div>
+
+      <div class="auth-right">
+        <h2 id="auth-title">Sign In</h2>
+        <p class="muted" id="auth-subtitle">
+          Access your Zenith 365 savings workspace.
+        </p>
+
+        <form id="auth-form" novalidate>
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" list="known-usernames" required aria-label="Username">
+          <datalist id="known-usernames"></datalist>
+
+          <div id="user-shortcut-wrap" class="shortcut-wrap hidden">
+            <p class="helper-text">Quick user switch</p>
+            <div class="shortcut-row">
+              <label for="known-users" class="sr-only">Saved users</label>
+              <select id="known-users" aria-label="Saved users"></select>
+              <button id="use-known-user" type="button" class="btn btn-ghost">Use account</button>
+            </div>
+          </div>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required aria-label="Password">
+
+          <div id="confirm-wrap" class="hidden">
+            <label for="password-confirm">Confirm Password</label>
+            <input id="password-confirm" name="password-confirm" type="password" autocomplete="new-password" aria-label="Confirm password">
+          </div>
+
+          <button id="auth-submit" type="submit" class="btn btn-primary">Sign in</button>
+          <p id="auth-error" class="form-error" role="alert" aria-live="polite"></p>
+          <button id="auth-mode-toggle" type="button" class="link-btn helper-text">New here? Create an account.</button>
+          <p class="helper-text">Your data stays local on this browser.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/storage.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/sw-register.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Zenith 365 premium savings dashboard">
+  <title>Zenith 365 | Savings Dashboard</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="dashboard">
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-glow bg-glow-primary"></div>
+    <div class="bg-glow bg-glow-secondary"></div>
+  </div>
+
+  <div class="app-shell">
+    <header class="topbar glass-card">
+      <div class="brand-wrap">
+        <p class="pill">Zenith 365</p>
+        <h1>Premium Savings Dashboard</h1>
+      </div>
+
+      <div class="topbar-actions">
+        <label for="plan-select" class="sr-only">Select Savings Plan</label>
+        <select id="plan-select" aria-label="Select savings plan"></select>
+        <button id="new-plan-btn" class="btn btn-ghost" type="button">New Plan</button>
+        <button id="export-btn" class="btn btn-ghost" type="button">Export PDF</button>
+        <button id="import-btn" class="btn btn-ghost" type="button">Import</button>
+        <button id="logout-btn" class="btn btn-ghost danger" type="button">Logout</button>
+      </div>
+      <input id="import-file-input" type="file" accept="application/json" class="hidden" aria-label="Import JSON data">
+    </header>
+
+    <main class="dashboard-grid">
+      <section class="left-column">
+        <article id="hero-card" class="glass-card hero-card">
+          <p id="greeting-line" class="muted">Welcome back.</p>
+          <div class="hero-user-wrap">
+            <button
+              id="current-user-badge"
+              class="hero-user-badge"
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="account-menu"
+            >
+              <span class="user-badge-icon" aria-hidden="true"></span>
+              <span class="user-badge-text">Signed in: -</span>
+              <span class="user-badge-caret" aria-hidden="true">&#9662;</span>
+            </button>
+
+            <div id="account-menu" class="account-menu hidden" role="menu" aria-label="Account menu">
+              <p class="account-menu-label">Account</p>
+              <p id="account-menu-user" class="account-menu-user">-</p>
+              <button id="switch-account-btn" class="account-menu-btn" type="button" role="menuitem">
+                Switch account
+              </button>
+              <button id="account-logout-btn" class="account-menu-btn danger" type="button" role="menuitem">
+                Logout
+              </button>
+            </div>
+          </div>
+          <h2 id="active-plan-name">No plan yet</h2>
+          <p id="plan-summary" class="muted">Create your first savings plan to begin.</p>
+
+          <div class="progress-wrap">
+            <svg class="progress-ring" viewBox="0 0 220 220" aria-label="Savings progress ring">
+              <circle class="ring-track" cx="110" cy="110" r="92"></circle>
+              <circle id="ring-progress" class="ring-progress" cx="110" cy="110" r="92"></circle>
+            </svg>
+            <div class="progress-meta">
+              <p>Current Savings</p>
+              <h3 id="saved-amount">GHS 0.00</h3>
+              <p id="projected-amount-by-now" class="projected-amount">Projected by now GHS 0.00</p>
+              <p id="target-amount">Target GHS 0.00</p>
+              <span id="progress-percent" class="pill subtle">0%</span>
+            </div>
+          </div>
+
+          <button id="pay-today-btn" class="btn btn-secondary" type="button">Pay Today</button>
+        </article>
+
+        <article class="glass-card kpi-grid" aria-label="Savings KPIs">
+          <div class="kpi-card">
+            <p class="muted">Current Streak</p>
+            <h3 id="kpi-streak">0</h3>
+          </div>
+          <div class="kpi-card">
+            <p class="muted">Completed</p>
+            <h3 id="kpi-completed">0</h3>
+          </div>
+          <div class="kpi-card">
+            <p class="muted">Overdue</p>
+            <h3 id="kpi-overdue">0</h3>
+          </div>
+          <div class="kpi-card">
+            <p class="muted">Upcoming</p>
+            <h3 id="kpi-upcoming">0</h3>
+          </div>
+        </article>
+      </section>
+
+      <section class="right-column">
+        <article class="glass-card calendar-card">
+          <div class="calendar-header">
+            <h2>Plan Calendar</h2>
+            <div class="month-controls">
+              <button id="month-prev" class="icon-btn" type="button" aria-label="Previous month">&larr;</button>
+              <p id="month-label" aria-live="polite"></p>
+              <button id="month-next" class="icon-btn" type="button" aria-label="Next month">&rarr;</button>
+            </div>
+          </div>
+
+          <div id="calendar-filters" class="chip-row" role="group" aria-label="Calendar filters">
+            <button class="chip active" data-filter="all" type="button">All</button>
+            <button class="chip" data-filter="overdue" type="button">Overdue</button>
+            <button class="chip" data-filter="upcoming" type="button">Upcoming</button>
+            <button class="chip" data-filter="done" type="button">Done</button>
+          </div>
+
+          <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="Savings calendar"></div>
+          <p id="calendar-empty" class="muted hidden" aria-live="polite">No entries for this month.</p>
+        </article>
+
+        <article class="glass-card charts-card">
+          <div class="charts-header">
+            <h2>Analytics</h2>
+            <p id="projection-note" class="muted">Projection unavailable until progress starts.</p>
+          </div>
+
+          <div class="chart-grid">
+            <section class="chart-panel">
+              <h3>Cumulative Saved vs Target</h3>
+              <canvas id="chart-cumulative" aria-label="Cumulative saved vs target chart"></canvas>
+            </section>
+
+            <section class="chart-panel">
+              <h3>Weekly Deposits (Last 10 Weeks)</h3>
+              <canvas id="chart-weekly" aria-label="Weekly deposits chart"></canvas>
+            </section>
+
+            <section class="chart-panel">
+              <h3>Streak Timeline</h3>
+              <canvas id="chart-streak" aria-label="Streak timeline chart"></canvas>
+            </section>
+
+            <section class="chart-panel">
+              <h3>Rolling 7-Day Completion</h3>
+              <canvas id="chart-rolling" aria-label="Rolling completion chart"></canvas>
+            </section>
+
+            <section class="chart-panel chart-panel-wide">
+              <h3>Projection</h3>
+              <canvas id="chart-projection" aria-label="Projection chart"></canvas>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <button id="pay-today-fab" class="fab" type="button" aria-label="Pay today">Pay Today</button>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <canvas id="confetti-canvas" class="confetti-canvas" aria-hidden="true"></canvas>
+
+  <dialog id="plan-modal" class="glass-modal" aria-labelledby="plan-modal-title">
+    <form id="plan-form" method="dialog">
+      <h2 id="plan-modal-title">Create Savings Plan</h2>
+      <label for="plan-name">Plan Name</label>
+      <input id="plan-name" name="plan-name" type="text" required maxlength="40" aria-label="Plan name">
+
+      <label for="plan-mode">Mode</label>
+      <select id="plan-mode" name="plan-mode" required aria-label="Plan mode">
+        <option value="full">Full daily (1.0x) for 365 days</option>
+        <option value="half">Half daily (0.5x) for 365 days</option>
+        <option value="quarter">Quarter daily (0.25x) for 365 days</option>
+        <option value="simple">Simple daily (fixed amount)</option>
+        <option value="weekly">Weekly mode</option>
+      </select>
+
+      <div id="simple-amount-wrap" class="hidden">
+        <label for="simple-daily-amount">Daily Amount (GHS)</label>
+        <input
+          id="simple-daily-amount"
+          name="simple-daily-amount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          value="10.00"
+          aria-label="Simple daily amount"
+        >
+      </div>
+
+      <label for="plan-start">Start Date</label>
+      <input id="plan-start" name="plan-start" type="date" required aria-label="Start date">
+
+      <label for="plan-color">Accent Color</label>
+      <input id="plan-color" name="plan-color" type="color" value="#7c5cff" aria-label="Accent color">
+
+      <p id="plan-target-preview" class="muted">Target: GHS 66,795.00</p>
+
+      <div class="modal-actions">
+        <button id="cancel-plan-btn" class="btn btn-ghost" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit">Create Plan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/calendar.js" defer></script>
+  <script src="js/charts.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/sw-register.js" defer></script>
+</body>
+</html>
